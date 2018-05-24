@@ -67,6 +67,14 @@ namespace WindowsFormsApp1
 
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //this.MouseWheel += Form1_MouseWheel;
+            //this.MouseMove += pictureBox1_MouseMove;
+            //this.MouseDown += pictureBox1_MouseDown;
+            //this.MouseUp += pictureBox1_MouseUp;
+        }
+
         private void label1_Click(object sender, EventArgs e)
         {
             pictureBox1.Refresh();
