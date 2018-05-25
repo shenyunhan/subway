@@ -32,7 +32,6 @@ namespace WindowsFormsApp1
 
         public FormMain()
         {
-
             map = LoadMap("BeijingSubwayMap.json");
             stationIds = new Dictionary<string, int>();
             lineIds = new Dictionary<string, int>();
@@ -53,6 +52,7 @@ namespace WindowsFormsApp1
                     graph.AddEdge(from, to, lineIds[line.Name]);
                 }
             }
+
             path = new List<Point>();
 
             InitializeComponent();
@@ -69,58 +69,37 @@ namespace WindowsFormsApp1
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //this.MouseWheel += Form1_MouseWheel;
-            //this.MouseMove += pictureBox1_MouseMove;
-            //this.MouseDown += pictureBox1_MouseDown;
-            //this.MouseUp += pictureBox1_MouseUp;
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
-            pictureBox1.Refresh();
         }
 
         private void label2_Click(object sender, EventArgs e)
         {
-
         }
-        //private Size beforeResizeSize = Size.Empty;
-
-        //protected override void OnResizeBegin(EventArgs e)
-        //{
-        //    base.OnResizeBegin(e);
-        //    beforeResizeSize = this.Size;
-        //}
-        //protected override void OnResizeEnd(EventArgs e)
-        //{
-        //    base.OnResizeEnd(e);
-        //    //窗口resize之后的大小
-        //    Size endResizeSize = this.Size;
-        //    //获得变化比例
-        //    float percentWidth = (float)endResizeSize.Width / beforeResizeSize.Width;
-        //    float percentHeight = (float)endResizeSize.Height / beforeResizeSize.Height;
-        //    foreach (Control control in this.Controls)
-        //    {
-        //        if (control is DataGridView)
-        //            continue;
-        //        //按比例改变控件大小
-        //        control.Width = (int)(control.Width * percentWidth);
-        //        control.Height = (int)(control.Height * percentHeight);
-        //        //为了不使控件之间覆盖 位置也要按比例变化
-        //        control.Left = (int)(control.Left * percentWidth);
-        //        control.Top = (int)(control.Top * percentHeight);
-        //    }
-        //}
         static int radius = 7;
         private void button1_Click(object sender, EventArgs e)
         {
             string start = textBox1.Text.ToString();
             string end = textBox2.Text.ToString();
 
+            if (!stationIds.ContainsKey(start) || !stationIds.ContainsKey(end))
+            {
+                MessageBox.Show("站名输入错误！");
+                return;
+            }
+
             int source = stationIds[start];
             int target = stationIds[end];
 
             KeyValuePair<int, List<KeyValuePair<int, int>>> sp = graph.ShortestPath(target, source);
+
+            if (sp.Key == 0x3f3f3f3f)
+            {
+                MessageBox.Show("不可到达！");
+                return;
+            }
 
             Console.WriteLine(sp.Key);
             Console.Write(map.Stations[source].Name);
@@ -138,6 +117,7 @@ namespace WindowsFormsApp1
                 path.Add(new Point(map.Stations[i.Key].X, map.Stations[i.Key].Y));
             }
 
+            pictureBox1.Refresh();
             DrawPath();
             
         }
@@ -157,30 +137,15 @@ namespace WindowsFormsApp1
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-
         }
-        ////////////////
-        //void Form1_MouseWheel(object sender, MouseEventArgs e)
-        //{
-        //    if (e.Delta > 0) //放大图片
-        //    {
-        //        pictureBox1.Size = new Size(pictureBox1.Width + 50, pictureBox1.Height + 50);
-        //    }
-        //    else
-        //    {  //缩小图片
-        //        pictureBox1.Size = new Size(pictureBox1.Width - 50, pictureBox1.Height - 50);
-        //    }
-        //}///////
 
         //Bitmap myBmp;
         Point mouseDownPoint = new Point(); //记录拖拽过程鼠标位置

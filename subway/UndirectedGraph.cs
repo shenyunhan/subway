@@ -37,19 +37,18 @@ namespace Subway
 
         public KeyValuePair<int, List<KeyValuePair<int, int>>> ShortestPath(int source, int target)
         {
-            Dictionary<int, bool> vis = new Dictionary<int, bool>();
             Dictionary<int, int> dist = new Dictionary<int, int>();
             Dictionary<int, KeyValuePair<int, int>> pre = new Dictionary<int, KeyValuePair<int, int>>();
             foreach (int id in adj.Keys)
             {
-                vis[id] = false;
                 dist[id] = 0x3f3f3f3f;
             }
-            vis[source] = true;
             dist[source] = 0;
 
             Queue<Edge> q = new Queue<Edge>();
+            HashSet<Edge> vis = new HashSet<Edge>();
             q.Enqueue(new Edge(source, -1));
+            vis.Add(new Edge(source, -1));
 
             while (q.Count != 0)
             {
@@ -62,14 +61,14 @@ namespace Subway
                     {
                         dist[e.To] = temp;
                         pre[e.To] = new KeyValuePair<int, int>(x.To, e.Line);
-                        if (!vis[e.To])
+                        if (!vis.Contains(e))
                         {
                             q.Enqueue(e);
-                            vis[e.To] = true;
+                            vis.Add(e);
                         }
                     }
                 }
-                vis[x.To] = false;
+                vis.Remove(x);
             }
 
             List<KeyValuePair<int, int>> path = new List<KeyValuePair<int, int>>();
