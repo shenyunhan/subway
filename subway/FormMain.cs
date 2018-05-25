@@ -101,15 +101,7 @@ namespace WindowsFormsApp1
                 return;
             }
 
-            Console.WriteLine(sp.Key);
-            Console.Write(map.Stations[source].Name);
-            for (int i = 0; i < sp.Value.Count; i++)
-            {
-                if (i != 0 && sp.Value[i].Value != sp.Value[i - 1].Value)
-                    Console.Write(" " + map.Lines[sp.Value[i].Value].Name);
-                Console.Write("\n" + map.Stations[sp.Value[i].Key].Name);
-            }
-            Console.WriteLine();
+
             path.Clear();
             path.Add(new Point(map.Stations[source].X, map.Stations[source].Y));
             foreach (var i in sp.Value)
